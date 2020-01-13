@@ -40,6 +40,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:arg name="urdf_extras" default="empty.urdf" />
 
   <!-- Included URDF/XACRO Files -->
+  <xacro:include filename="$(find ur_description)/urdf/ur10.urdf.xacro" />    <!-- NEW -->
+
   <xacro:include filename="$(find husky_description)/urdf/decorations.urdf.xacro" />
   <xacro:include filename="$(find husky_description)/urdf/wheel.urdf.xacro" />
 
@@ -48,6 +50,20 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:include filename="$(find husky_description)/urdf/accessories/sensor_arch.urdf.xacro"/>
 
   <xacro:property name="M_PI" value="3.14159"/>
+
+  <!-- NEW -->
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+  <xacro:ur10_robot prefix="ur10_arm_" joint_limited="false"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+  />
+
+  <!-- UR10 Mounting Position -->         <!-- NEW -->
+  <xacro:property name="ur10_base_x" value="0"/>
+  <xacro:property name="ur10_base_y" value="0"/>
+  <xacro:property name="ur10_base_z" value="0.0065"/>
+  <xacro:property name="ur10_base_roll" value="0"/>
+  <xacro:property name="ur10_base_pitch" value="0"/>
+  <xacro:property name="ur10_base_yaw" value="-1.57"/>
 
   <!-- Base Size -->
   <xacro:property name="base_x_size" value="0.98740000" />
@@ -107,6 +123,13 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="base_link" />
     <child link="inertial_link" />
+  </joint>
+
+  <!-- NEW -->
+  <joint name="ur10_arm_base" type="fixed">
+    <parent link="top_plate_link" />
+    <child link="ur10_arm_base_link" />
+    <origin xyz="${ur10_base_x} ${ur10_base_y} ${ur10_base_z}" rpy="${ur10_base_roll} ${ur10_base_pitch} ${ur10_base_yaw}" />
   </joint>
 
   <!-- IMU Link is the standard mounting position for the UM6 IMU.-->
